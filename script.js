@@ -25,11 +25,11 @@ const functionName = function () => {
 }
 */
 
-const inputElement = (type, name, title) => {
+const inputElement = (type, name, title, req = '') => {
     return `
-    <div> 
+    <div class='${type}''> 
         <label>${title}</label>
-        <input type='${type}' name='${name}'> 
+        <input type='${type}' name='${name}' ${req}> 
     </div>
 `;
 }
@@ -55,10 +55,65 @@ const selectElement = (type, name, title, options) => {
     </div>
 `;
 }
+
+const nameData = {
+    type = 'text',
+    name = 'firstName',
+    label = 'Keresztneved'
+
+}
+
+anotherFormFields = [
+    {
+        type: 'text',
+        name: 'street',
+        label: 'Közterület neve'
+    },
+    {
+        type: 'text',
+        name: 'street',
+        label: 'Közterólet neve'   
+    },
+    {   type: 'number',
+        name: 'houseNumber',
+        label: 'Házszám'
+    },
+    {
+        type: 'text',
+        name: 'street',
+        label: 'Közterólet neve'  
+    }
+  
+]
+
+const formFields = [{
+    type = 'text',
+    name = 'firstName',
+    label = 'Keresztneved'
+    },
+    {
+        type = 'email',
+        name = 'personalEmail',
+        label = 'Email címed'
+    },
+    {  type = 'file',
+        name = 'profilePicture',
+        label = 'Profilképed'
+    },
+    {  type = 'checkbox',
+        name = 'newsletter',
+        label = 'Feliratkozás a hírlevélre'
+    },
+    {  type = 'filecheckbox',
+        name = 'terms',
+        label = 'Elfogadom a feltételeket'
+    }
     
-const formElement = `
+]
+    
+/*const formElement = `
 <form id='form'>
-${inputElement('text', 'firstName', 'Keresztneved')}
+${inputElement(nameData.type, nameData.name, nameData.label)}
 ${inputElement('file', 'profilePicture', 'Profilképed')}
 ${inputElement('email', 'personalEmail', 'Email címed')}
 ${inputElement('checkbox', 'newsletter', 'Feliratkozás a hírlevélre')}
@@ -67,6 +122,59 @@ ${selectElement('select', 'where', 'Hol hallottál rólunk?', ['Interneten', 'Is
 <button>OK</button>
 </form>
 `;
+*/
+
+const processCountries = async() => {
+    const countryRes = await fetch("https://restcountries.com/v3.1/all");
+    const countryArr = await countryRes.json();
+    console.log(countryArr[0].name.official);
+    /*üres tömb9t definiálni, for of ciklussal bejárni a countryArry-t
+    [i].name.official =< PUSH
+    return
+    */
+   let countries = [];
+   for (const c of countryArr) {
+       countries.push(c.name.official);
+   }
+   return countries;
+}
+processCountries();
+
+const selectFields = {
+    type:'select',
+    name:'where',
+    label:'Hol hallottál rólunk?',
+        options:[
+            'interneten',
+            'ismerőstől',
+            'egyéb'
+        ]
+}
+
+const anotherSelectFields = {
+    type:'select',
+    name:'countries',
+    label:'Ország',
+        options:[
+            'Italy',
+            'Nepal',
+            'egyéb'
+        ]
+}
+
+const formElement = (ffs,id,sel) => {
+    let inputs = '';
+    for (const ff of ffs) {
+        inputs += inputElement(ff.type, ff.name, ff.label, ff.req)
+    };    
+    return `
+    <form id='form'>
+        ${inputs}
+        ${selectElement(sel.type, sel.name, sel.label, sel.options)}
+        <button>OK</button>
+    </form>
+    `;
+}
 
 const formSubmit = (event) =>{
     event.preventDefault();
@@ -83,8 +191,9 @@ const inputUpdate = (event) => {
 }
 function loadEvent() {
     const root = document.getElementById('root');
-    root.insertAdjacentHTML('afterbegin', formElement);
-    root.insertAdjacentHTML('afterbegin', `
+    root.insertAdjacentHTML('afterbegin', formElement(formFields, 'form', selectFields));
+    root.insertAdjacentHTML('afterbegin', formElement(anotherFormFields, 'form2', anotherSelectFields))
+    root.insertAdjacentElement('afterbegin', `)
         <div id='inputValue'></div>
         `);
 
@@ -98,4 +207,4 @@ function loadEvent() {
     }
 }
 
-window.addEventListener(`load`, loadEvent);
+window.addEventListener('load', loadEvent);

@@ -50,7 +50,7 @@ body {
     display:inline-block;
     
     margin-bottom: 50px;
-    left: ;
+    
     transform: translate(-50%);
     text-align: center;
     font-weight: 500;
@@ -75,11 +75,10 @@ body {
     margin: auto;
     max-width: 90vw;
     align-content: center;
-    width: 50%;
+    max-width: 90%;
     
 
-    border: darkgrey;
-    border-width: 10px;
+    border: 2px solid darkgrey;
     border-radius: 1px;
 
     background-color: #fff;
@@ -104,5 +103,6 @@ body {
    }
 
    button {
-
+      bottom: 10px;
+      
    }
